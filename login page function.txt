@@ -1,0 +1,33 @@
+import mysql.connector as my
+con = my.connect(user = 'root',password = '19113', host = 'localhost', database = 'security' )
+cursor = con.cursor()
+
+print('login')
+a = input('are you a new user? (Y/N)')
+if a.lower() == 'y':
+    d = input('enter your username: ')
+    b = input('enter your password:')
+    c = input('confirm your password:')
+    e = input('Enter a hint for your password:')
+    if b == c :
+        print('password confirmed')
+        ab = 'insert into passwords (platform,password,hint) values(%s,%s,%s)'
+        ac = (d,b,e)
+        cursor.execute(ab,ac)
+        con.commit()
+    else:
+        print('password does not match')
+elif a.lower() == 'n':
+    usern = input('enter your username:')
+    pwdu = input('enter your password:')
+    cursor.execute('select password from passwords where platform like (%s)',(usern,))
+    result = cursor.fetchall()
+    for i in result:
+        for j in i:
+            if j == pwdu:
+                print('login successfully completed')
+            else:
+                print('incorrect password! \ncheck your password and username')
+                break
+            break
+        break
